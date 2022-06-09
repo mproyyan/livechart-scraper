@@ -4,10 +4,13 @@ namespace App\Models;
 
 use Laravel\Sanctum\PersonalAccessToken as SanctumPersonalAccessToken;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Carbon;
 
 class PersonalAccessToken extends SanctumPersonalAccessToken
 {
+   use HasFactory;
+
    /**
     * The attributes that should be cast to native types.
     *
