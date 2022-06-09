@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Contracts\UserInterface;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -69,5 +70,17 @@ class User extends Authenticatable implements UserInterface
         $tokenKey = $token->getKey();
 
         return new NewAccessToken($token, "${tokenKey}|${plainTextToken}");
+    }
+
+    /**
+     * Set the user's hashed password.
+     *
+     * @return \Illuminate\Database\Eloquent\Casts\Attribute<mixed, mixed>
+     */
+    protected function password(): Attribute
+    {
+        return new Attribute(
+            set: fn (string $value) => bcrypt($value)
+        );
     }
 }
