@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Str;
+use Laravel\Sanctum\NewAccessToken;
 
 class User extends Authenticatable implements UserInterface
 {
@@ -42,4 +44,30 @@ class User extends Authenticatable implements UserInterface
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Create a expirable new personal access token for the user.
+     *
+     * @param string $name
+     * @param string|null $expiredAt
+     * @param array  $abilities
+     *
+     * @return \Laravel\Sanctum\NewAccessToken
+     */
+    public function createExpirableToken(string $name = 'main', ?string $expiredAt, array $abilities = ['*'])
+    {
+        $plainTextToken = Str::random(40);
+
+        /** @var \Laravel\Sanctum\PersonalAccessToken $token */
+        $token = $this->tokens()->create([
+            'name' => $name,
+            'token' => hash('sha256', $plainTextToken),
+            'abilities' => $abilities,
+            'expired_at' => $expiredAt
+        ]);
+
+        $tokenKey = $token->getKey();
+
+        return new NewAccessToken($token, "${tokenKey}|${plainTextToken}");
+    }
 }
