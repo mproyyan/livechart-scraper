@@ -2,8 +2,13 @@
 
 namespace App\Exceptions;
 
+use App\Supports\HttpApiExceptionFormat;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Http\Response;
 use Throwable;
+
 
 class Handler extends ExceptionHandler
 {
@@ -43,8 +48,29 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->reportable(function (Throwable $e) {
-            //
-        });
+        $this->renderable($this->handleValidationException(...));
+    }
+
+    protected function handleValidationException(ValidationException $e, Request $request)
+    {
+        if ($request->is('api/*')) {
+            $errors = $e->errors();
+            $error = $errors[array_key_first($errors)];
+
+            if (count($errors) > 1 || count($error) > 1) {
+                $validationProblem = new HttpApiExceptionFormat(Response::HTTP_UNPROCESSABLE_ENTITY, [
+                    'detail' => "There were multiple problems on field that have occurred.",
+                    'problems' => $errors
+                ]);
+
+                return response($validationProblem->toArray(), Response::HTTP_UNPROCESSABLE_ENTITY);
+            }
+
+            $validationProblem = new HttpApiExceptionFormat(Response::HTTP_UNPROCESSABLE_ENTITY, [
+                'detail' => $e->getMessage(),
+            ]);
+
+            return response($validationProblem->toArray(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
     }
 }
