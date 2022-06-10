@@ -93,10 +93,16 @@ class AuthController extends Controller
 
         $token->delete();
 
-        return response()->json([
-            'token' => (new PersonalAccessTokenResource($token))->additional([
-                'status' => TokenStatusEnum::Revoked
-            ])
-        ]);
+        $personalAccessTokenResource = (new PersonalAccessTokenResource($token))
+            ->additional([
+                'token' => [
+                    'token' => $token->plainTextToken,
+                    'status' => TokenStatusEnum::Revoked
+                ]
+            ]);
+
+        return $personalAccessTokenResource
+            ->response()
+            ->setStatusCode(Response::HTTP_OK);
     }
 }
