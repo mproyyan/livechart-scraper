@@ -13,7 +13,8 @@ use Illuminate\Support\Carbon;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\JsonResponse;
 use Laravel\Sanctum\NewAccessToken;
-use Laravel\Sanctum\PersonalAccessToken;
+use App\Models\PersonalAccessToken;
+use Illuminate\Http\Request;
 use Mockery;
 
 class AuthTest extends TestCase
@@ -61,6 +62,27 @@ class AuthTest extends TestCase
         /** @var AuthController $auth */
         $auth = $this->app->make(AuthController::class);
         $token = $this->app->call([$auth, 'login']);
+
+        $this->assertInstanceOf(JsonResponse::class, $token);
+    }
+
+    public function test_logout_method()
+    {
+        $tokenMock = Mockery::mock(PersonalAccessToken::class, function (MockInterface $mock) {
+            $mock->shouldReceive('delete')->withNoArgs()->andReturnTrue();
+        })->makePartial();
+
+        $userMock = Mockery::mock(UserInterface::class, function (MockInterface $mock) use ($tokenMock) {
+            $mock->shouldReceive('currentAccessToken')->withNoArgs()->andReturn($tokenMock);
+        });
+
+        $this->mock(Request::class, function (MockInterface $mock) use ($userMock) {
+            $mock->shouldReceive('user')->withNoArgs()->andReturn($userMock);
+        });
+
+        /** @var AuthController $auth */
+        $auth = $this->app->make(AuthController::class);
+        $token = $this->app->call([$auth, 'logout']);
 
         $this->assertInstanceOf(JsonResponse::class, $token);
     }
