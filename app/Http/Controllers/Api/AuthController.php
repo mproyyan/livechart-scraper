@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Contracts\UserInterface;
+use App\Enums\TokenStatusEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterUserRequest;
 use App\Http\Resources\UserResource;
@@ -10,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use App\Http\Requests\LoginRequest;
 use App\Http\Resources\PersonalAccessTokenResource;
+use App\Models\PersonalAccessToken;
 
 /**
  * @property User $user
@@ -61,7 +63,33 @@ class AuthController extends Controller
         $token = $user->createExpirableToken($tokenName, $expiredAt);
 
         return response()->json([
-            'token' => new PersonalAccessTokenResource($token)
+            'token' => (new PersonalAccessTokenResource($token))->additional([
+                'status' => TokenStatusEnum::Active
+            ])
         ], 200);
+    }
+
+    /**
+     * handle user logout
+     * 
+     * @param Request $request
+     * 
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function logout(Request $request)
+    {
+        /** @var User $user */
+        $user = $request->user();
+
+        /** @var PersonalAccessToken $token */
+        $token = $user->currentAccessToken();
+
+        $token->delete();
+
+        return response()->json([
+            'token' => (new PersonalAccessTokenResource($token))->additional([
+                'status' => TokenStatusEnum::Revoked
+            ])
+        ]);
     }
 }
