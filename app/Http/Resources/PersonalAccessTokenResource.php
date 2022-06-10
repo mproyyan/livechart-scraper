@@ -20,7 +20,6 @@ class PersonalAccessTokenResource extends JsonResource
             'abilities' => $this->accessToken->abilities,
             'expired_at' => $this->accessToken->expired_at ?? null,
             'token' => $this->plainTextToken,
-            'status' => TokenStatusEnum::Active
         ];
     }
 }
