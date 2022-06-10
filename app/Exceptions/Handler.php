@@ -3,10 +3,12 @@
 namespace App\Exceptions;
 
 use App\Supports\HttpApiExceptionFormat;
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Response;
+use Phpro\ApiProblem\Http\UnauthorizedProblem;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 use Throwable;
 
@@ -51,6 +53,7 @@ class Handler extends ExceptionHandler
     {
         $this->renderable($this->handleValidationException(...));
         $this->renderable($this->handleTooManyHttpRequestsException(...));
+        $this->renderable($this->handleAuthenticationException(...));
     }
 
     protected function handleValidationException(ValidationException $e, Request $request)
@@ -85,6 +88,15 @@ class Handler extends ExceptionHandler
             ]);
 
             return response($tooManyRequestsProblem->toArray(), $e->getStatusCode());
+        }
+    }
+
+    protected function handleAuthenticationException(AuthenticationException $e, Request  $request)
+    {
+        if ($request->is('api/*')) {
+            $unauthenticatedProblem = new UnauthorizedProblem($e->getMessage());
+
+            return response($unauthenticatedProblem->toArray(), Response::HTTP_UNAUTHORIZED);
         }
     }
 }
