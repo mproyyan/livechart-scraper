@@ -8,6 +8,8 @@ use App\Http\Requests\RegisterUserRequest;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Http\Requests\LoginRequest;
+use App\Http\Resources\PersonalAccessTokenResource;
 
 /**
  * @property User $user
@@ -36,5 +38,30 @@ class AuthController extends Controller
         return response()->json([
             'user' => new UserResource($user)
         ], 201);
+    }
+
+    /**
+     * handle user login
+     * 
+     * @param LoginRequest $request
+     * 
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function login(LoginRequest $request)
+    {
+        $request->authenticateOrFail();
+
+        /** @var User $user */
+        $user = $request->user();
+
+        $tokenName = $request->input('token_name');
+        $expiredAt = $request->date('expired_at', 'Y-m-d');
+
+        /** @var \Laravel\Sanctum\NewAccessToken $token */
+        $token = $user->createExpirableToken($tokenName, $expiredAt);
+
+        return response()->json([
+            'token' => new PersonalAccessTokenResource($token)
+        ], 200);
     }
 }
