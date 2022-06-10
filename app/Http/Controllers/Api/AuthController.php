@@ -12,6 +12,7 @@ use App\Models\User;
 use App\Http\Requests\LoginRequest;
 use App\Http\Resources\PersonalAccessTokenResource;
 use App\Models\PersonalAccessToken;
+use Illuminate\Http\Response;
 
 /**
  * @property User $user
@@ -36,10 +37,11 @@ class AuthController extends Controller
         $validated = $request->validated();
 
         $user = $this->user->create($validated);
+        $userResource = new UserResource($user);
 
-        return response()->json([
-            'user' => new UserResource($user)
-        ], 201);
+        return $userResource
+            ->response()
+            ->setStatusCode(Response::HTTP_CREATED);
     }
 
     /**
