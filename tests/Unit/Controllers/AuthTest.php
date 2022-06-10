@@ -42,9 +42,7 @@ class AuthTest extends TestCase
         $expiredAt = Carbon::createFromInterface($this->faker->dateTimeBetween('today', '+1 month'));
 
         /** @var PersonalAccessToken $tokenMock */
-        $tokenMock = Mockery::mock(PersonalAccessToken::class, function (MockInterface $mock) {
-            $mock->shouldReceive('getAttribute', 'offsetExists');
-        });
+        $tokenMock = Mockery::mock(PersonalAccessToken::class)->makePartial();
 
         $userMock = Mockery::mock(UserInterface::class, function (MockInterface $mock) use ($tokenMock, $expiredAt) {
             $mock->shouldReceive('createExpirableToken')
