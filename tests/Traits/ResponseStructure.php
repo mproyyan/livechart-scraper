@@ -10,4 +10,12 @@ trait ResponseStructure
       'title',
       'detail'
    ];
+
+   protected $tokenStructure = [
+      'token_name',
+      'abilities',
+      'expired_at',
+      'token',
+      'status'
+   ];
 }
