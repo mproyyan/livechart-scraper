@@ -8,6 +8,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Str;
 use Laravel\Sanctum\NewAccessToken;
@@ -50,12 +51,12 @@ class User extends Authenticatable implements UserInterface
      * Create a expirable new personal access token for the user.
      *
      * @param string $name
-     * @param string|null $expiredAt
+     * @param Carbon|null $expiredAt
      * @param array  $abilities
      *
      * @return \Laravel\Sanctum\NewAccessToken
      */
-    public function createExpirableToken(string $name = 'main', ?string $expiredAt, array $abilities = ['*'])
+    public function createExpirableToken(string $name = 'main', ?Carbon $expiredAt, array $abilities = ['*'])
     {
         $plainTextToken = Str::random(40);
 
