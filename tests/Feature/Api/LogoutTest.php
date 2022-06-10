@@ -37,7 +37,7 @@ class LogoutTest extends TestCase
         ]);
     }
 
-    public function test_unauthorized_cannot_logout()
+    public function test_unauthorized_user_cannot_logout()
     {
         $response = $this->postJson('/api/logout');
 
