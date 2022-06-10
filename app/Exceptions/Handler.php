@@ -7,6 +7,7 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Response;
+use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
 use Throwable;
 
 
@@ -49,6 +50,7 @@ class Handler extends ExceptionHandler
     public function register()
     {
         $this->renderable($this->handleValidationException(...));
+        $this->renderable($this->handleTooManyHttpRequestsException(...));
     }
 
     protected function handleValidationException(ValidationException $e, Request $request)
@@ -71,6 +73,18 @@ class Handler extends ExceptionHandler
             ]);
 
             return response($validationProblem->toArray(), Response::HTTP_UNPROCESSABLE_ENTITY);
+        }
+    }
+
+    protected function handleTooManyHttpRequestsException(TooManyRequestsHttpException $e, Request $request)
+    {
+        if ($request->is('api/*')) {
+            $retryAfter = $e->getHeaders()['Retry-After'];
+            $tooManyRequestsProblem = new HttpApiExceptionFormat($e->getStatusCode(), [
+                'detail' => "You have exceeded the rate limit. Please try again in {$retryAfter} seconds.",
+            ]);
+
+            return response($tooManyRequestsProblem->toArray(), $e->getStatusCode());
         }
     }
 }
