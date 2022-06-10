@@ -63,12 +63,17 @@ class AuthController extends Controller
 
         /** @var \Laravel\Sanctum\NewAccessToken $token */
         $token = $user->createExpirableToken($tokenName, $expiredAt);
+        $personalAccessTokenResource = (new PersonalAccessTokenResource($token->accessToken))
+            ->additional([
+                'token' => [
+                    'token' => $token->plainTextToken,
+                    'status' => TokenStatusEnum::Active
+                ]
+            ]);
 
-        return response()->json([
-            'token' => (new PersonalAccessTokenResource($token))->additional([
-                'status' => TokenStatusEnum::Active
-            ])
-        ], 200);
+        return $personalAccessTokenResource
+            ->response()
+            ->setStatusCode(Response::HTTP_OK);
     }
 
     /**

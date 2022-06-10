@@ -7,6 +7,8 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class PersonalAccessTokenResource extends JsonResource
 {
+    public static $wrap = 'token';
+
     /**
      * Transform the resource into an array.
      *
@@ -16,10 +18,9 @@ class PersonalAccessTokenResource extends JsonResource
     public function toArray($request)
     {
         return [
-            'token_name' => $this->accessToken->name,
-            'abilities' => $this->accessToken->abilities,
-            'expired_at' => $this->accessToken->expired_at ?? null,
-            'token' => $this->plainTextToken,
+            'token_name' => $this->name,
+            'abilities' => $this->abilities,
+            'expired_at' => $this->expired_at ?? null
         ];
     }
 }
