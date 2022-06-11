@@ -19,7 +19,6 @@ interface AnimeInterface extends BaseModelInterface
       ?string $type = null,
       ?string $source = null,
       ?int $episodes = null,
-      ?string $status = null,
       ?array $duration = null,
       ?array $aired = null,
       ?string $season = null,
