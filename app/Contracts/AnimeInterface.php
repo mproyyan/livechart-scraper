@@ -32,7 +32,7 @@ interface AnimeInterface extends BaseModelInterface
     *
     * @return Paginator
     */
-   public function all(int $page = 1): Paginator;
+   public function all(string $sortBy = 'popularity', string $titles = 'romaji'): Paginator;
 
    /**
     * Get a anime by id.
