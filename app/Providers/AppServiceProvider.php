@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Contracts\AnimeTvInterface;
 use App\Contracts\UserInterface;
+use App\Models\AnimeTv;
 use Illuminate\Support\ServiceProvider;
 use App\Models\PersonalAccessToken;
 use App\Models\User;
@@ -16,7 +18,8 @@ class AppServiceProvider extends ServiceProvider
      * @var array
      */
     public array $bindings = [
-        UserInterface::class => User::class
+        UserInterface::class => User::class,
+        AnimeTvInterface::class => AnimeTv::class
     ];
 
     /**
