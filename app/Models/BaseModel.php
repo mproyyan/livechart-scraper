@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use App\Contracts\BaseModelInterface;
+use App\Traits\AnimeCrawler;
 
 abstract class BaseModel implements BaseModelInterface
 {
+   use AnimeCrawler;
+
    /**
     * The primary key for the model.
     *
