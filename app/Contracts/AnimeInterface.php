@@ -2,8 +2,6 @@
 
 namespace App\Contracts;
 
-use Illuminate\Contracts\Pagination\Paginator;
-
 interface AnimeInterface extends BaseModelInterface
 {
    /**
@@ -29,9 +27,9 @@ interface AnimeInterface extends BaseModelInterface
    /**
     * Get all animes in the current page.
     *
-    * @return Paginator
+    * @return Array
     */
-   public function all(?string $season, ?int $year, string $sortBy = 'popularity', string $titles = 'romaji'): Paginator;
+   public function all(int $page = 1, ?string $season = null, ?int $year = null, string $sortBy = 'popularity', string $titles = 'romaji'): array;
 
    /**
     * Get a anime by id.

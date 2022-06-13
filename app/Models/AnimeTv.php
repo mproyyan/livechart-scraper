@@ -5,17 +5,16 @@ namespace App\Models;
 use App\Contracts\AnimeTvInterface;
 use App\Enums\SeasonEnum;
 use App\Facades\Goutte;
-use Illuminate\Contracts\Pagination\Paginator as PaginatorInterface;
-use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class AnimeTv extends BaseModel implements AnimeTvInterface
 {
    public const BASE_URL = 'https://www.livechart.me/';
 
-   public const ANIME_PER_PAGE = 20;
+   public const ANIME_PER_PAGE = 25;
 
    protected string $primaryKey = 'id';
 
@@ -37,7 +36,7 @@ class AnimeTv extends BaseModel implements AnimeTvInterface
    ) {
    }
 
-   public function all(?string $season, ?int $year, string $sortBy = 'popularity', string $titles = 'romaji'): PaginatorInterface
+   public function all(int $page = 1, ?string $season = null, ?int $year = null, string $sortBy = 'popularity', string $titles = 'romaji'): array
    {
       $season = $season ?? SeasonEnum::getSeasonByMonth(now()->format('M'))->value;
       $year = $year ?? now()->format('Y');
@@ -50,7 +49,20 @@ class AnimeTv extends BaseModel implements AnimeTvInterface
          'titles' => $titles
       ]));
 
-      $animes = $crawler->filter('article.anime')->each(function (Crawler $node) {
+      $totalAnimes = $crawler->filter('article.anime')->count();
+      $animesPaginated = $crawler->filter('article.anime')
+         ->reduce(function (Crawler $node, $i) use ($page) {
+            $index = $i + 1;
+            $offset = 0 + (self::ANIME_PER_PAGE * ($page - 1));
+
+            return $index > $offset && $index <= (self::ANIME_PER_PAGE * $page);
+         });
+
+      if ($animesPaginated->count() < 1) {
+         throw new NotFoundHttpException("Data not found in current page [Page $page].");
+      }
+
+      $animes = $animesPaginated->each(function (Crawler $node) {
          return new self(
             id: $node->attr('data-anime-id'),
             title: $node->filter('.main-title a')->text(),
@@ -69,9 +81,47 @@ class AnimeTv extends BaseModel implements AnimeTvInterface
          );
       });
 
-      $paginator = new Paginator($animes, self::ANIME_PER_PAGE);
+      $firstPage = 1;
+      $lastPage = (int) ceil((int) $totalAnimes / self::ANIME_PER_PAGE);
+      $from = 1 + (self::ANIME_PER_PAGE * ($page - 1));
+      $to = ($from + (int) $animesPaginated->count()) - 1;
 
-      return $paginator;
+      return [
+         'animes' => $animes,
+         'pagination' => [
+            'current_page' => $page,
+            'last_page' => $lastPage,
+            'from' => $from,
+            'to' => $to,
+            'items' => [
+               'count' => (int) $animesPaginated->count(),
+               'per_page' => self::ANIME_PER_PAGE,
+               'total' => $totalAnimes
+            ],
+            'links' => [
+               'first' => url('tv?' . Arr::query([
+                  'page' => $firstPage,
+                  'sortby' => $sortBy,
+                  'titles' => $titles
+               ])),
+               'last' => url('tv?' . Arr::query([
+                  'page' => $lastPage,
+                  'sortby' => $sortBy,
+                  'titles' => $titles
+               ])),
+               'prev' => $page > $firstPage ? url('tv?' . Arr::query([
+                  'page' => $page - 1,
+                  'sortby' => $sortBy,
+                  'titles' => $titles
+               ])) : null,
+               'next' => $page < $lastPage ? url('tv?' . Arr::query([
+                  'page' => $page + 1,
+                  'sortby' => $sortBy,
+                  'titles' => $titles
+               ])) : null,
+            ]
+         ]
+      ];
    }
 
    public function find(string $value): self
