@@ -7,26 +7,43 @@ use Illuminate\Support\Arr;
 
 class AnimePagination implements Arrayable
 {
-   /** @var array $data */
-   private $data;
-
    /** @var string $path */
    private $path = '';
 
    /** @var array $queryParams */
    private $queryParams = [];
 
+   /** @var int $currentPage */
+   private int $currentPage;
+
+   /** @var int $perPage */
+   private int $perPage;
+
+   /** @var int $itemsCount */
+   private int $itemsCount;
+
+   /** @var int $total */
+   private int $total;
+
    public function __construct(int $itemsCount, int $total, int $perPage, int $currentPage)
    {
-      $this->data = [
-         'current_page' => $currentPage,
-         'last_page' => (int) ceil($total / $perPage),
-         'from' => 1 + ($perPage * ($currentPage - 1)),
-         'to' => ((1 + ($perPage * ($currentPage - 1))) + $itemsCount) - 1,
+      $this->itemsCount = $itemsCount;
+      $this->total = $total;
+      $this->perPage = $perPage;
+      $this->currentPage = $currentPage;
+   }
+
+   public function toArray()
+   {
+      return $this->data = [
+         'current_page' => $this->currentPage,
+         'last_page' => (int) ceil($this->total / $this->perPage),
+         'from' => 1 + ($this->perPage * ($this->currentPage - 1)),
+         'to' => ((1 + ($this->perPage * ($this->currentPage - 1))) + $this->itemsCount) - 1,
          'items' => [
-            'count' => $itemsCount,
-            'per_page' => $perPage,
-            'total' => $total
+            'count' => $this->itemsCount,
+            'per_page' => $this->perPage,
+            'total' => $this->total
          ],
          'links' => [
             'first' => url($this->path . '?' . Arr::query([
@@ -34,24 +51,19 @@ class AnimePagination implements Arrayable
                ...$this->queryParams
             ])),
             'last' => url($this->path . '?' . Arr::query([
-               'page' => (int) ceil($total / $perPage),
+               'page' => (int) ceil($this->total / $this->perPage),
                ...$this->queryParams
             ])),
-            'prev' => $currentPage > 1 ? url($this->path . '?' . Arr::query([
-               'page' => $currentPage - 1,
+            'prev' => $this->currentPage > 1 ? url($this->path . '?' . Arr::query([
+               'page' => $this->currentPage - 1,
                ...$this->queryParams
             ])) : null,
-            'next' => $currentPage < (int) ceil($total / $perPage) ? url($this->path . '?' . Arr::query([
-               'page' => $currentPage + 1,
+            'next' => $this->currentPage < (int) ceil($this->total / $this->perPage) ? url($this->path . '?' . Arr::query([
+               'page' => $this->currentPage + 1,
                ...$this->queryParams
             ])) : null,
          ]
       ];
-   }
-
-   public function toArray()
-   {
-      return $this->data;
    }
 
    public function setPath(string $path)
