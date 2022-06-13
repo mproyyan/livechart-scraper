@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Contracts\AnimeTvInterface;
 use App\Enums\SeasonEnum;
 use App\Facades\Goutte;
+use App\Pagination\AnimePagination;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Symfony\Component\DomCrawler\Crawler;
@@ -81,46 +82,14 @@ class AnimeTv extends BaseModel implements AnimeTvInterface
          );
       });
 
-      $firstPage = 1;
-      $lastPage = (int) ceil((int) $totalAnimes / self::ANIME_PER_PAGE);
-      $from = 1 + (self::ANIME_PER_PAGE * ($page - 1));
-      $to = ($from + (int) $animesPaginated->count()) - 1;
+      $pagination = (new AnimePagination($animesPaginated->count(), $totalAnimes, self::ANIME_PER_PAGE, $page))
+         ->setPath('tv')
+         ->setQueryParams(['sortby' => $sortBy, 'titles' => $titles])
+         ->toArray();
 
       return [
          'animes' => $animes,
-         'pagination' => [
-            'current_page' => $page,
-            'last_page' => $lastPage,
-            'from' => $from,
-            'to' => $to,
-            'items' => [
-               'count' => (int) $animesPaginated->count(),
-               'per_page' => self::ANIME_PER_PAGE,
-               'total' => $totalAnimes
-            ],
-            'links' => [
-               'first' => url('tv?' . Arr::query([
-                  'page' => $firstPage,
-                  'sortby' => $sortBy,
-                  'titles' => $titles
-               ])),
-               'last' => url('tv?' . Arr::query([
-                  'page' => $lastPage,
-                  'sortby' => $sortBy,
-                  'titles' => $titles
-               ])),
-               'prev' => $page > $firstPage ? url('tv?' . Arr::query([
-                  'page' => $page - 1,
-                  'sortby' => $sortBy,
-                  'titles' => $titles
-               ])) : null,
-               'next' => $page < $lastPage ? url('tv?' . Arr::query([
-                  'page' => $page + 1,
-                  'sortby' => $sortBy,
-                  'titles' => $titles
-               ])) : null,
-            ]
-         ]
+         'pagination' => $pagination
       ];
    }
 
