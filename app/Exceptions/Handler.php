@@ -10,6 +10,8 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Response;
 use Phpro\ApiProblem\Http\UnauthorizedProblem;
 use Symfony\Component\HttpKernel\Exception\TooManyRequestsHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Phpro\ApiProblem\Http\NotFoundProblem;
 use Throwable;
 
 
@@ -52,8 +54,19 @@ class Handler extends ExceptionHandler
     public function register()
     {
         $this->renderable($this->handleValidationException(...));
+        $this->renderable($this->handleNotFoundHttpException(...));
         $this->renderable($this->handleTooManyHttpRequestsException(...));
         $this->renderable($this->handleAuthenticationException(...));
+    }
+
+    protected function handleNotFoundHttpException(NotFoundHttpException $e, Request $request)
+    {
+        if ($request->is('api/*')) {
+            $message = $e->getMessage();
+            $notFoundProblem = new NotFoundProblem($message);
+
+            return response($notFoundProblem->toArray(), $e->getStatusCode());
+        }
     }
 
     protected function handleValidationException(ValidationException $e, Request $request)
