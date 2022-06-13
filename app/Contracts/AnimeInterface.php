@@ -2,7 +2,7 @@
 
 namespace App\Contracts;
 
-interface AnimeInterface extends BaseModelInterface
+interface AnimeInterface
 {
    /**
     * Create new anime instance
