@@ -23,20 +23,4 @@ interface AnimeInterface extends BaseModelInterface
       ?int $year = null,
       ?array $studios = null
    );
-
-   /**
-    * Get all animes in the current page.
-    *
-    * @return Array
-    */
-   public function all(int $page = 1, ?string $season = null, ?int $year = null, string $sortBy = 'popularity', string $titles = 'romaji'): array;
-
-   /**
-    * Get a anime by id.
-    *
-    * @param string $slug
-    *
-    * @return self
-    */
-   public function find(string $slug): self;
 }
