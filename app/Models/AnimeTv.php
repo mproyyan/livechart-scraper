@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class AnimeTv extends BaseModel implements AnimeTvInterface
+class AnimeTv extends AnimeBaseModel implements AnimeTvInterface
 {
    public const BASE_URL = 'https://www.livechart.me/';
 

@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Contracts\BaseModelInterface;
 use App\Traits\AnimeCrawler;
 
-abstract class BaseModel implements BaseModelInterface
+abstract class AnimeBaseModel implements BaseModelInterface
 {
    use AnimeCrawler;
 
