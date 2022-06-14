@@ -17,8 +17,6 @@ class AnimeTv extends AnimeBaseModel implements AnimeTvInterface
 
    public const ANIME_PER_PAGE = 25;
 
-   protected string $primaryKey = 'id';
-
    public function __construct(
       public ?int $id = null,
       public ?string $title = null,
@@ -91,11 +89,6 @@ class AnimeTv extends AnimeBaseModel implements AnimeTvInterface
          'animes' => $animes,
          'pagination' => $pagination
       ];
-   }
-
-   public function find(string $value): self
-   {
-      return $this;
    }
 
    protected function getEpisodes(Crawler $node)
