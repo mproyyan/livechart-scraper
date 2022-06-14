@@ -22,4 +22,6 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('/logout', 'logout')->middleware('auth:sanctum');
 });
 
-Route::get('/tv/{season?}/{year?}', AnimeTvController::class);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/tv/{season?}/{year?}', AnimeTvController::class);
+});
