@@ -81,7 +81,7 @@ class AnimeTv extends AnimeBaseModel implements AnimeTvInterface
       });
 
       $pagination = (new AnimePagination($animesPaginated->count(), $totalAnimes, self::ANIME_PER_PAGE, $page))
-         ->setPath('tv')
+         ->setPath(request()->path())
          ->setQueryParams(['sortby' => $sortBy, 'titles' => $titles])
          ->toArray();
 
