@@ -37,7 +37,7 @@ class AnimeTv extends AnimeBaseModel implements AnimeTvInterface
 
    public function all(int $page = 1, ?string $season = null, ?int $year = null, string $sortBy = 'popularity', string $titles = 'romaji'): array
    {
-      $season = $season ?? SeasonEnum::getSeasonByMonth(now()->format('M'))->value;
+      $season = $season ? Str::lower($season) : Str::lower(SeasonEnum::getSeasonByMonth(now()->format('M'))->value);
       $year = $year ?? now()->format('Y');
 
       $url = self::BASE_URL . Str::lower($season) . '-'  . $year . '/tv';
@@ -81,7 +81,7 @@ class AnimeTv extends AnimeBaseModel implements AnimeTvInterface
       });
 
       $pagination = (new AnimePagination($animesPaginated->count(), $totalAnimes, self::ANIME_PER_PAGE, $page))
-         ->setPath(request()->path())
+         ->setPath(request()->path() !== '/' ?: "tv/$season/$year")
          ->setQueryParams(['sortby' => $sortBy, 'titles' => $titles])
          ->toArray();
 
