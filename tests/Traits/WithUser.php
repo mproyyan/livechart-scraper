@@ -13,6 +13,8 @@ trait WithUser
 
    protected string $token;
 
+   protected string $bearerToken;
+
    protected function setupUser()
    {
       $this->user = User::factory()
@@ -22,5 +24,6 @@ trait WithUser
       $tokenId = $this->user->tokens->first()->id;
       $plainTextToken = PersonalAccessTokenFactory::DEFAULT_PLAIN_TEXT_TOKEN;
       $this->token = $tokenId . '|' . $plainTextToken;
+      $this->bearerToken = 'Bearer ' . $this->token;
    }
 }
