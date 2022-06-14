@@ -113,13 +113,23 @@ class AnimeTv extends AnimeBaseModel implements AnimeTvInterface
       $rawText = explode('×', $node->text());
 
       if (count($rawText) <= 1) {
-         return null;
+         return [
+            'hours' => null,
+            'minutes' => null,
+            'seconds' => null,
+            'total' => null,
+         ];
       }
 
       $duration = trim($rawText[1]);
 
       if (explode(' ', $duration)[0] === '?') {
-         return null;
+         return [
+            'hours' => null,
+            'minutes' => null,
+            'seconds' => null,
+            'total' => null,
+         ];
       }
 
       return $this->formatDuration($duration);
