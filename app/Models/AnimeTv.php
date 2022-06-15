@@ -93,19 +93,12 @@ class AnimeTv extends AnimeBaseModel implements AnimeTvInterface
 
    protected function getEpisodes(Crawler $node)
    {
-      $rawText = explode('×', $node->text());
-
-      if (count($rawText) <= 1) {
-         return null;
+      if ($data = $this->hasEpisode($node->text())) {
+         $episodes = explode(' ', $data)[0];
+         return $episodes;
       }
 
-      $episode = explode(' ', $rawText[0])[0];
-
-      if ($episode === '?') {
-         return null;
-      }
-
-      return (int) $episode;
+      return null;
    }
 
    protected function getDuration(Crawler $node)
