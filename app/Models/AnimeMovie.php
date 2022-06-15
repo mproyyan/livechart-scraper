@@ -18,20 +18,20 @@ class AnimeMovie extends AnimeBaseModel implements AnimeMovieInterface
    public const ANIME_PER_PAGE = 25;
 
    public function __construct(
-      private ?int $id = null,
-      private ?string $title = null,
-      private ?string $image = null,
-      private ?string $synopsis = null,
-      private ?array $formatted_synopsis = null,
-      private ?array $genres = null,
-      private ?string $type = null,
-      private ?string $source = null,
-      private ?int $episodes = null,
-      private ?array $duration = null,
-      private ?array $aired = null,
-      private ?string $season = null,
-      private ?int $year = null,
-      private ?array $studios = null
+      public ?int $id = null,
+      public ?string $title = null,
+      public ?string $image = null,
+      public ?string $synopsis = null,
+      public ?array $formatted_synopsis = null,
+      public ?array $genres = null,
+      public ?string $type = null,
+      public ?string $source = null,
+      public ?int $episodes = null,
+      public ?array $duration = null,
+      public ?array $aired = null,
+      public ?string $season = null,
+      public ?int $year = null,
+      public ?array $studios = null
    ) {
    }
 
