@@ -3,9 +3,11 @@
 namespace App\Providers;
 
 use App\Contracts\AnimeMovieInterface;
+use App\Contracts\AnimeOvaInterface;
 use App\Contracts\AnimeTvInterface;
 use App\Contracts\UserInterface;
 use App\Models\AnimeMovie;
+use App\Models\AnimeOva;
 use App\Models\AnimeTv;
 use Illuminate\Support\ServiceProvider;
 use App\Models\PersonalAccessToken;
@@ -23,6 +25,7 @@ class AppServiceProvider extends ServiceProvider
         UserInterface::class => User::class,
         AnimeTvInterface::class => AnimeTv::class,
         AnimeMovieInterface::class => AnimeMovie::class,
+        AnimeOvaInterface::class => AnimeOva::class,
     ];
 
     /**
