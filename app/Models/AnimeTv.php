@@ -90,28 +90,4 @@ class AnimeTv extends AnimeBaseModel implements AnimeTvInterface
          'pagination' => $pagination
       ];
    }
-
-   protected function getEpisodes(Crawler $node)
-   {
-      if ($data = $this->hasEpisode($node->text())) {
-         $episodes = explode(' ', $data)[0];
-         return $episodes;
-      }
-
-      return null;
-   }
-
-   protected function getDuration(Crawler $node)
-   {
-      if ($data = $this->hasDuration($node->text())) {
-         $duration = explode(' ', $data)[0];
-         return $this->formatDuration($duration);
-      }
-
-      return [
-         'hours' => null,
-         'minutes' => null,
-         'seconds' => null,
-      ];
-   }
 }
