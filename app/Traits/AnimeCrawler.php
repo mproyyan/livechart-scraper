@@ -243,7 +243,6 @@ trait AnimeCrawler
          'hours' => (int) $hour,
          'minutes' => (int) $minute,
          'seconds' => (int) $second,
-         'total' => ((int) $hour * 60) + (int) $minute + ((int) $second >= 30 ? 1 : 0)
       ];
    }
 }
