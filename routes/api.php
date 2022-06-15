@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AnimeMovieController;
 use App\Http\Controllers\Api\AnimeTvController;
 use App\Http\Controllers\Api\AuthController;
 use Illuminate\Http\Request;
@@ -24,4 +25,5 @@ Route::controller(AuthController::class)->group(function () {
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/tv/{season?}/{year?}', AnimeTvController::class);
+    Route::get('/movies/{season?}/{year?}', AnimeMovieController::class);
 });
