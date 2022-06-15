@@ -90,18 +90,4 @@ class AnimeMovie extends AnimeBaseModel implements AnimeMovieInterface
          'pagination' => $pagination
       ];
    }
-
-   protected function getDuration(Crawler $node)
-   {
-      if (str_contains($node->text(), '?')) {
-         return [
-            'hours' => null,
-            'minutes' => null,
-            'seconds' => null,
-            'total' => null,
-         ];
-      }
-
-      return $this->formatDuration($node->text());
-   }
 }
