@@ -245,4 +245,26 @@ trait AnimeCrawler
          'seconds' => (int) $second,
       ];
    }
+
+   protected function hasEpisode(string $data)
+   {
+      $pattern = '/([0-9]+ eps)/';
+
+      if (preg_match_all($pattern, $data, $matches)) {
+         return $matches[0][0];
+      }
+
+      return false;
+   }
+
+   protected function hasDuration(string $data)
+   {
+      $pattern = '/([0-9]+[h|m|s]) ?([0-9]+[m|s])? ?([0-9]+s)?/';
+
+      if (preg_match_all($pattern, $data, $matches)) {
+         return $matches[0][0];
+      }
+
+      return false;
+   }
 }
