@@ -213,7 +213,7 @@ trait AnimeCrawler
 
    protected function formatDuration($time)
    {
-      $pattern = '/([0-9]+[h|m]) ?([0-9]+[m|s])?/';
+      $pattern = '/([0-9]+[h|m|s]) ?([0-9]+[m|s])? ?([0-9]+s)?/';
 
       $hour = 0;
       $minute = 0;
@@ -228,6 +228,10 @@ trait AnimeCrawler
             $minute = substr($matches[1][0], 0, strpos($matches[1][0], 'm'));
          }
 
+         if (str_contains($matches[1][0], 's')) {
+            $second = substr($matches[1][0], 0, strpos($matches[1][0], 's'));
+         }
+
          if (!empty($matches[2][0])) {
             if (str_contains($matches[2][0], 'm')) {
                $minute = substr($matches[2][0], 0, strpos($matches[2][0], 'm'));
@@ -236,6 +240,10 @@ trait AnimeCrawler
             if (str_contains($matches[2][0], 's')) {
                $second = substr($matches[2][0], 0, strpos($matches[2][0], 's'));
             }
+         }
+
+         if (!empty($matches[3][0])) {
+            $second = substr($matches[3][0], 0, strpos($matches[3][0], 's'));
          }
       }
 
