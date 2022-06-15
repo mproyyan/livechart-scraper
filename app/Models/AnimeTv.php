@@ -103,28 +103,15 @@ class AnimeTv extends AnimeBaseModel implements AnimeTvInterface
 
    protected function getDuration(Crawler $node)
    {
-      $rawText = explode('×', $node->text());
-
-      if (count($rawText) <= 1) {
-         return [
-            'hours' => null,
-            'minutes' => null,
-            'seconds' => null,
-            'total' => null,
-         ];
+      if ($data = $this->hasDuration($node->text())) {
+         $duration = explode(' ', $data)[0];
+         return $this->formatDuration($duration);
       }
 
-      $duration = trim($rawText[1]);
-
-      if (explode(' ', $duration)[0] === '?') {
-         return [
-            'hours' => null,
-            'minutes' => null,
-            'seconds' => null,
-            'total' => null,
-         ];
-      }
-
-      return $this->formatDuration($duration);
+      return [
+         'hours' => null,
+         'minutes' => null,
+         'seconds' => null,
+      ];
    }
 }
