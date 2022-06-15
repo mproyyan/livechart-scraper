@@ -88,8 +88,7 @@ trait AnimeCrawler
 
    protected function getDuration(Crawler $node)
    {
-      if ($data = $this->hasDuration($node->text())) {
-         $duration = explode(' ', $data)[0];
+      if ($duration = $this->hasDuration($node->text())) {
          return $this->formatDuration($duration);
       }
 
