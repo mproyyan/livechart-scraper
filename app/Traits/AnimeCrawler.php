@@ -78,8 +78,7 @@ trait AnimeCrawler
 
    protected function getEpisodes(Crawler $node)
    {
-      if ($data = $this->hasEpisode($node->text())) {
-         $episodes = explode(' ', $data)[0];
+      if ($episodes = $this->hasEpisode($node->text())) {
          return $episodes;
       }
 
@@ -279,13 +278,19 @@ trait AnimeCrawler
 
    protected function hasEpisode(string $data)
    {
-      $pattern = '/([0-9]+ eps)/';
+      $pattern = '/([0-9?]+ eps)/';
 
       if (preg_match_all($pattern, $data, $matches)) {
-         return $matches[0][0];
+         $eps = $matches[0][0];
+
+         if (str_contains('?', $eps)) {
+            return false;
+         }
+
+         return (int) explode(' ', $eps)[0];
       }
 
-      return false;
+      return (int) 1;
    }
 
    protected function hasDuration(string $data)
