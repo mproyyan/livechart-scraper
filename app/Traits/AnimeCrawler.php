@@ -21,13 +21,9 @@ trait AnimeCrawler
 
    protected function getFormattedSynopsis(Crawler $node)
    {
-      if ($node->matches('p.editor-note')) {
-         return $node->nextAll()->each(function (Crawler $node) {
-            return $node->text();
-         });
-      };
-
-      return $node->ancestors()->children()->each(function (Crawler $node) {
+      return $node->reduce(function (Crawler $node) {
+         return $node->matches('.editor-note') ? false : true;
+      })->each(function (Crawler $node) {
          return $node->text();
       });
    }
