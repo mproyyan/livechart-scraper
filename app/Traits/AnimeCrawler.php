@@ -10,19 +10,13 @@ trait AnimeCrawler
 {
    protected function getSynopsis(Crawler $node)
    {
-      if ($node->matches('p.editor-note')) {
-         $arrayOfSynopsis = $node->nextAll()->each(function (Crawler $node) {
-            return $node->text();
-         });
-
-         return join(" ", $arrayOfSynopsis);
-      };
-
-      $arrayOfSynopsis = $node->ancestors()->children()->each(function (Crawler $node) {
+      $arrayOfSynopsis = $node->reduce(function (Crawler $node) {
+         return $node->matches('.editor-note') ? false : true;
+      })->each(function (Crawler $node) {
          return $node->text();
       });
 
-      return join(" ", $arrayOfSynopsis);
+      return join(' ', $arrayOfSynopsis);
    }
 
    protected function getFormattedSynopsis(Crawler $node)
