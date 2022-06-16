@@ -71,7 +71,7 @@ class AnimeMovie extends AnimeBaseModel implements AnimeMovieInterface
             genres: $this->getGenres($node->filter('.anime-card .anime-tags li a')),
             type: 'Movie',
             source: $node->filter('.anime-card .anime-info .anime-metadata .anime-source')->text(),
-            episodes: null,
+            episodes: $this->getEpisodes($node->filter('.anime-card .anime-info .anime-metadata .anime-episodes')),
             duration: $this->getDuration($node->filter('.anime-card .anime-info .anime-metadata .anime-episodes')),
             aired: $this->getAiringProperties($node->filter('.anime-card .anime-info .anime-date')),
             season: $this->getSeason($node->filter('.anime-card .anime-info .anime-date')),
