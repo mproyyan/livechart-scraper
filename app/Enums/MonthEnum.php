@@ -32,6 +32,7 @@ enum MonthEnum: int
          'October', 'Oct', 'october', 'oct' => 10,
          'November', 'Nov', 'november', 'nov' => 11,
          'December', 'Dec', 'december', 'dec' => 12,
+         default => null,
       };
    }
 }
