@@ -76,7 +76,7 @@ class AnimeOva extends AnimeBaseModel implements AnimeOvaInterface
             aired: $this->getAiringProperties($node->filter('.anime-card .anime-info .anime-date')),
             season: $this->getSeason($node->filter('.anime-card .anime-info .anime-date')),
             year: $this->getYear($node->filter('.anime-card .anime-info .anime-date')),
-            studios: $this->getStudios($node->filter('.anime-card .anime-info .anime-studios')->children())
+            studios: $this->getStudios($node->filter('.anime-card .anime-info .anime-studios li a'))
          );
       });
 
