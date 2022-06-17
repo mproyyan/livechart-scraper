@@ -12,10 +12,6 @@ use Illuminate\Http\Response;
 /** @property AnimeDetail $anime */
 class AnimeDetailController extends Controller
 {
-    // public function __construct(
-    //     private AnimeDetailInterface $anime
-    // ) {
-    // }
     /**
      * Handle the incoming request.
      *
