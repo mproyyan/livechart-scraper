@@ -156,7 +156,7 @@ trait AnimeCrawler
       }
 
       if (count($rawData) === 2) {
-         $season = (SeasonEnum::getSeasonByMonth($rawData[0]))->value;
+         $season = SeasonEnum::tryFrom($rawData[0]) ? SeasonEnum::tryFrom($rawData[0])->value : (SeasonEnum::getSeasonByMonth($rawData[0]))->value;
          $year = $rawData[1];
 
          return "$season $year";
@@ -194,7 +194,7 @@ trait AnimeCrawler
       if (count($rawData) === 2) {
          return [
             'day' => null,
-            'month' => (int) MonthEnum::convertToNumber($rawData[0]),
+            'month' => MonthEnum::convertToNumber($rawData[0]) ?? null,
             'year' => (int) $rawData[1]
          ];
       }
