@@ -45,7 +45,7 @@ class AnimeDetail extends AnimeBaseModel implements AnimeDetailInterface
          throw new NotFoundHttpException("Cannot find anime with that id [$id]");
       }
 
-      $this->id = $id;
+      $this->id = $crawler->filter('#content > div.row')->attr('data-anime-details-id');
       $this->title = $crawler->filter('div.column > h4')->innerText();
       $this->image = $crawler->filter('div.anime-poster img')->attr('src');
       $this->synopsis = $this->getSynopsis($crawler->filter('.expandable-text-body p'));
