@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\AnimeResource;
 use App\Models\AnimeDetail;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 /** @property AnimeDetail $anime */
 class AnimeDetailController extends Controller
@@ -23,6 +24,8 @@ class AnimeDetailController extends Controller
      */
     public function __invoke(AnimeDetailInterface $anime)
     {
-        return new AnimeResource($anime);
+        return (new AnimeResource($anime))
+            ->response()
+            ->setStatusCode(Response::HTTP_OK);
     }
 }
