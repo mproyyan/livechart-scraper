@@ -88,6 +88,53 @@ trait AnimeCrawler
       ];
    }
 
+   protected function getAnimeMetaData(Crawler $node)
+   {
+      $type = null;
+      $source = null;
+      $episodes = 1;
+      $duration = null;
+
+      $node->each(function (Crawler $node) use (&$type, &$source, &$episodes, &$duration) {
+         if (preg_match_all('/format/i', $node->filter('.info-bar-cell-label')->text(), $matches)) {
+            $type = $node->filter('.info-bar-cell-value')->text();
+         }
+
+         if (preg_match_all('/source/i', $node->filter('.info-bar-cell-label')->text(), $matches)) {
+            $source = $node->filter('.info-bar-cell-value')->text();
+         }
+
+         if (preg_match_all('/episodes?/i', $node->filter('.info-bar-cell-label')->text(), $matches)) {
+            $episodes = $node->filter('.info-bar-cell-value')->text();
+
+            if (str_contains('?', $episodes)) {
+               $episodes = null;
+            }
+         }
+
+         if (preg_match_all('/run time/i', $node->filter('.info-bar-cell-label')->text(), $matches)) {
+            $duration = $node->filter('.info-bar-cell-value')->text();
+
+            if ($data = $this->hasDuration($duration)) {
+               $duration = $this->formatDuration($data);
+            } else {
+               $duration = [
+                  'hours' => null,
+                  'minutes' => null,
+                  'seconds' => null,
+               ];
+            }
+         }
+      });
+
+      return [
+         'type' => $type,
+         'source' => $source,
+         'episodes' => $episodes,
+         'duration' => $duration,
+      ];
+   }
+
    protected function formatPremiere($text)
    {
       $rawData = explode(',', $text);
