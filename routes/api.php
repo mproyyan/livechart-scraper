@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AnimeDetailController;
 use App\Http\Controllers\Api\AnimeMovieController;
 use App\Http\Controllers\Api\AnimeOvaController;
 use App\Http\Controllers\Api\AnimeTvController;
@@ -28,4 +29,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/tv/{season?}/{year?}', AnimeTvController::class);
     Route::get('/movies/{season?}/{year?}', AnimeMovieController::class);
     Route::get('/ovas/{season?}/{year?}', AnimeOvaController::class);
+    Route::get('/anime/{anime}', AnimeDetailController::class);
 });
