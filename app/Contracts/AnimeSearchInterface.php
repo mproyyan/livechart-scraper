@@ -9,5 +9,5 @@ interface AnimeSearchInterface extends AnimeInterface
     *
     * @return Array
     */
-   public function all(int $page = 1, string $titles = 'romaji', string $query): array;
+   public function all(string $query, int $page = 1, string $titles = 'romaji'): array;
 }
