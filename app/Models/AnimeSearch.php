@@ -8,6 +8,7 @@ use App\Facades\Goutte;
 use Illuminate\Support\Arr;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use App\Pagination\AnimePagination;
+use Illuminate\Support\Facades\Cache;
 
 class AnimeSearch extends AnimeBaseModel implements AnimeSearchInterface
 {
@@ -58,7 +59,13 @@ class AnimeSearch extends AnimeBaseModel implements AnimeSearchInterface
       $ids = $this->getIds($animesPaginated);
 
       foreach ($ids as $id) {
-         $anime = $animeDetail->find($id);
+         $anime = Cache::tags(['anime-detail'])->get("anime-detail-id-$id");
+
+         if (is_null($anime)) {
+            $anime = $animeDetail->find($id);
+            Cache::tags(['anime-detail'])->put("anime-detail-id-$id", $anime, now()->addHours(12));
+         }
+
          $animes[] = new self(
             id: $anime->id,
             title: $anime->title,
