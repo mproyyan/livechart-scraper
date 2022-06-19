@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Contracts\AnimeDetailInterface;
 use App\Facades\Goutte;
+use Illuminate\Support\Facades\Cache;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -38,6 +39,12 @@ class AnimeDetail extends AnimeBaseModel implements AnimeDetailInterface
 
    public function find(int $id)
    {
+      $anime = Cache::tags(['anime-detail'])->get("anime-detail-id-$id");
+
+      if (!is_null($anime)) {
+         return $anime;
+      }
+
       /** @var Crawler $crawler */
       $crawler = Goutte::request('GET',  self::BASE_URL . $id);
 
@@ -60,6 +67,7 @@ class AnimeDetail extends AnimeBaseModel implements AnimeDetailInterface
       $this->year = $this->getYear($crawler->filter('.section-body small > a'));
       $this->studios = $this->getStudios($crawler->filter('div.row div.column.medium-6')->eq(1)->filter('li a'));
 
+      Cache::tags(['anime-detail'])->put("anime-detail-id-$id", $this, now()->addHours(12));
       return $this;
    }
 
