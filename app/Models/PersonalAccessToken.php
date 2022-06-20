@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Scopes\NotExpiredScope;
 use Laravel\Sanctum\PersonalAccessToken as SanctumPersonalAccessToken;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -44,5 +45,15 @@ class PersonalAccessToken extends SanctumPersonalAccessToken
       return new Attribute(
          set: fn (Carbon $value): Carbon => $value->setHour(23)->setMinute(59)->setSecond(59),
       );
+   }
+
+   /**
+    * The "booted" method of the model.
+    *
+    * @return void
+    */
+   protected static function booted()
+   {
+      static::addGlobalScope(new NotExpiredScope());
    }
 }
