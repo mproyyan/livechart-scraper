@@ -352,6 +352,55 @@
                }
             }
          }
+      },
+      "/search": {
+         "get": {
+            "tags": ["Anime Search"],
+            "summary": "Search Anime",
+            "description": "Search Anime by title",
+            "parameters": [
+               {
+                  "in": "query",
+                  "required": true,
+                  "name": "query",
+                  "schema": {
+                     "type": "string"
+                  }
+               },
+               {
+                  "$ref": "#/components/parameters/PageParameter"
+               },
+               {
+                  "$ref": "#/components/parameters/TitlesParamater"
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "Get Anime by title successfully",
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "type": "object",
+                           "properties": {
+                              "animes": {
+                                 "type": "array",
+                                 "items": {
+                                    "$ref": "#/components/schemas/AnimeSchema"
+                                 }
+                              },
+                              "pagination": {
+                                 "$ref": "#/components/schemas/PaginationSchema"
+                              }
+                           }
+                        }
+                     }
+                  }
+               },
+               "4XX": {
+                  "$ref": "#/components/responses/4XX"
+               }
+            }
+         }
       }
    },
    "components": {
