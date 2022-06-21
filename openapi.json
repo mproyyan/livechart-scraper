@@ -306,6 +306,43 @@
                }
             }
          }
+      },
+      "/anime/{id}": {
+         "get": {
+            "tags": ["Anime by id"],
+            "summary": "Get Anime by id",
+            "description": "Get Anime by id",
+            "parameters": [
+               {
+                  "in": "path",
+                  "required": true,
+                  "name": "id",
+                  "schema": {
+                     "type": "integer"
+                  }
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "Get Anime OVA format successfully",
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "type": "object",
+                           "properties": {
+                              "anime": {
+                                 "$ref": "#/components/schemas/AnimeSchema"
+                              }
+                           }
+                        }
+                     }
+                  }
+               },
+               "4XX": {
+                  "$ref": "#/components/responses/4XX"
+               }
+            }
+         }
       }
    },
    "components": {
