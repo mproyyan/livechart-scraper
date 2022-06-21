@@ -135,13 +135,7 @@
             "description": "Logout an account and delete current token",
             "parameters": [
                {
-                  "in": "header",
-                  "required": true,
-                  "description": "Add prefix \"Bearer\" before your token",
-                  "name": "Authorization",
-                  "schema": {
-                     "type": "string"
-                  }
+                  "$ref": "#/components/parameters/AuthorizationParameter"
                }
             ],
             "responses": {
@@ -172,6 +166,9 @@
             "summary": "Get Animes TV format",
             "description": "Get Animes TV format by season and year, if season and year not included then it will get animes according current season and year.",
             "parameters": [
+               {
+                  "$ref": "#/components/parameters/AuthorizationParameter"
+               },
                {
                   "$ref": "#/components/parameters/SeasonParameter"
                },
@@ -223,6 +220,9 @@
             "description": "Get Animes Movies format by season and year, if season and year not included then it will get animes according current season and year.",
             "parameters": [
                {
+                  "$ref": "#/components/parameters/AuthorizationParameter"
+               },
+               {
                   "$ref": "#/components/parameters/SeasonParameter"
                },
                {
@@ -272,6 +272,9 @@
             "summary": "Get Animes OVA format",
             "description": "Get Animes OVA format by season and year, if season and year not included then it will get animes according current season and year.",
             "parameters": [
+               {
+                  "$ref": "#/components/parameters/AuthorizationParameter"
+               },
                {
                   "$ref": "#/components/parameters/SeasonParameter"
                },
@@ -323,6 +326,9 @@
             "description": "Get Anime by id",
             "parameters": [
                {
+                  "$ref": "#/components/parameters/AuthorizationParameter"
+               },
+               {
                   "in": "path",
                   "required": true,
                   "name": "id",
@@ -359,6 +365,9 @@
             "summary": "Search Anime",
             "description": "Search Anime by title",
             "parameters": [
+               {
+                  "$ref": "#/components/parameters/AuthorizationParameter"
+               },
                {
                   "in": "query",
                   "required": true,
@@ -699,6 +708,15 @@
                "English": {
                   "value": "english"
                }
+            }
+         },
+         "AuthorizationParameter": {
+            "in": "header",
+            "required": true,
+            "description": "Add prefix \"Bearer\" before your token",
+            "name": "Authorization",
+            "schema": {
+               "type": "string"
             }
          }
       }
