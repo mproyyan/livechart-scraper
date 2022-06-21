@@ -14,5 +14,226 @@
          "url": "http://livechart-scraper.test/api",
          "description": "Local server"
       }
-   ]
+   ],
+   "paths": {
+      "/register": {
+         "post": {
+            "tags": ["Authentication"],
+            "summary": "Register account",
+            "description": "Register new account with fresh email",
+            "requestBody": {
+               "required": true,
+               "description": "This data needed for register new acount",
+               "content": {
+                  "application/json": {
+                     "schema": {
+                        "type": "object",
+                        "properties": {
+                           "name": {
+                              "type": "string"
+                           },
+                           "email": {
+                              "type": "string"
+                           },
+                           "password": {
+                              "type": "string"
+                           },
+                           "password_confirmation": {
+                              "type": "string"
+                           }
+                        }
+                     }
+                  }
+               }
+            },
+            "responses": {
+               "201": {
+                  "description": "New account created",
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "type": "object",
+                           "properties": {
+                              "user": {
+                                 "$ref": "#/components/schemas/UserSchema"
+                              }
+                           }
+                        }
+                     }
+                  }
+               },
+               "422": {
+                  "description": "Unprocessable Entity",
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "$ref": "#/components/schemas/HttpExceptionSchema"
+                        }
+                     }
+                  }
+               }
+            }
+         }
+      },
+      "/login": {
+         "post": {
+            "tags": ["Authentication"],
+            "summary": "Login account",
+            "description": "Login account and create token",
+            "requestBody": {
+               "required": true,
+               "description": "This data needed for acount login and create new token",
+               "content": {
+                  "application/json": {
+                     "schema": {
+                        "type": "object",
+                        "properties": {
+                           "email": {
+                              "type": "string"
+                           },
+                           "password": {
+                              "type": "string"
+                           },
+                           "token_name": {
+                              "type": "string"
+                           },
+                           "expired_at": {
+                              "type": "string",
+                              "format": "date"
+                           }
+                        }
+                     }
+                  }
+               }
+            },
+            "responses": {
+               "200": {
+                  "description": "Login success and token created",
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "type": "object",
+                           "properties": {
+                              "token": {
+                                 "$ref": "#/components/schemas/TokenSchema"
+                              }
+                           }
+                        }
+                     }
+                  }
+               },
+               "4XX": {
+                  "$ref": "#/components/responses/4XX"
+               }
+            }
+         }
+      },
+      "/logout": {
+         "post": {
+            "tags": ["Authentication"],
+            "summary": "Logout account",
+            "description": "Logout an account and delete current token",
+            "parameters": [
+               {
+                  "in": "header",
+                  "required": true,
+                  "description": "Add prefix \"Bearer\" before your token",
+                  "name": "Authorization",
+                  "schema": {
+                     "type": "string"
+                  }
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "Logout successfully and current token deleted",
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "type": "object",
+                           "properties": {
+                              "token": {
+                                 "$ref": "#/components/schemas/TokenSchema"
+                              }
+                           }
+                        }
+                     }
+                  }
+               },
+               "4XX": {
+                  "$ref": "#/components/responses/4XX"
+               }
+            }
+         }
+      }
+   },
+   "components": {
+      "schemas": {
+         "UserSchema": {
+            "type": "object",
+            "properties": {
+               "name": {
+                  "type": "string"
+               },
+               "email": {
+                  "type": "string"
+               }
+            }
+         },
+         "TokenSchema": {
+            "type": "object",
+            "properties": {
+               "token_name": {
+                  "type": "string"
+               },
+               "abilities": {
+                  "type": "array",
+                  "items": {
+                     "type": "string"
+                  },
+                  "minItems": 1
+               },
+               "expired_at": {
+                  "type": "string",
+                  "format": "date-time"
+               },
+               "token": {
+                  "type": "string"
+               },
+               "status": {
+                  "type": "string"
+               }
+            }
+         },
+         "HttpExceptionSchema": {
+            "type": "object",
+            "properties": {
+               "status": {
+                  "type": "integer"
+               },
+               "type": {
+                  "type": "string"
+               },
+               "title": {
+                  "type": "string"
+               },
+               "detail": {
+                  "type": "string"
+               }
+            }
+         }
+      },
+      "responses": {
+         "4XX": {
+            "description": "",
+            "content": {
+               "application/json": {
+                  "schema": {
+                     "$ref": "#/components/schemas/HttpExceptionSchema"
+                  }
+               }
+            }
+         }
+      }
+   }
 }
