@@ -259,6 +259,53 @@
                }
             }
          }
+      },
+      "/ovas/{season}/{year}": {
+         "get": {
+            "tags": ["Anime OVA"],
+            "summary": "Get Animes OVA format",
+            "description": "Get Animes OVA format by season and year, if season and year not included then it will get animes according current season and year.",
+            "parameters": [
+               {
+                  "$ref": "#/components/parameters/SeasonParameter"
+               },
+               {
+                  "$ref": "#/components/parameters/YearParameter"
+               },
+               {
+                  "$ref": "#/components/parameters/PageParameter"
+               },
+               {
+                  "$ref": "#/components/parameters/SortByParameter"
+               },
+               {
+                  "$ref": "#/components/parameters/TitlesParamater"
+               }
+            ],
+            "responses": {
+               "200": {
+                  "description": "Get Anime OVA format successfully",
+                  "content": {
+                     "application/json": {
+                        "schema": {
+                           "type": "object",
+                           "properties": {
+                              "animes": {
+                                 "$ref": "#/components/schemas/AnimeSchema"
+                              },
+                              "pagination": {
+                                 "$ref": "#/components/schemas/PaginationSchema"
+                              }
+                           }
+                        }
+                     }
+                  }
+               },
+               "4XX": {
+                  "$ref": "#/components/responses/4XX"
+               }
+            }
+         }
       }
    },
    "components": {
