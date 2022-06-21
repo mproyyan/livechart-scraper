@@ -197,7 +197,10 @@
                            "type": "object",
                            "properties": {
                               "animes": {
-                                 "$ref": "#/components/schemas/AnimeSchema"
+                                 "type": "array",
+                                 "items": {
+                                    "$ref": "#/components/schemas/AnimeSchema"
+                                 }
                               },
                               "pagination": {
                                  "$ref": "#/components/schemas/PaginationSchema"
@@ -244,7 +247,10 @@
                            "type": "object",
                            "properties": {
                               "animes": {
-                                 "$ref": "#/components/schemas/AnimeSchema"
+                                 "type": "array",
+                                 "items": {
+                                    "$ref": "#/components/schemas/AnimeSchema"
+                                 }
                               },
                               "pagination": {
                                  "$ref": "#/components/schemas/PaginationSchema"
@@ -291,7 +297,10 @@
                            "type": "object",
                            "properties": {
                               "animes": {
-                                 "$ref": "#/components/schemas/AnimeSchema"
+                                 "type": "array",
+                                 "items": {
+                                    "$ref": "#/components/schemas/AnimeSchema"
+                                 }
                               },
                               "pagination": {
                                  "$ref": "#/components/schemas/PaginationSchema"
