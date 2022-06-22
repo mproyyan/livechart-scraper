@@ -130,6 +130,11 @@
       },
       "/logout": {
          "post": {
+            "security": [
+               {
+                  "SanctumAuth": []
+               }
+            ],
             "tags": ["Authentication"],
             "summary": "Logout account",
             "description": "Logout an account and delete current token",
@@ -162,6 +167,11 @@
       },
       "/tv/{season}/{year}": {
          "get": {
+            "security": [
+               {
+                  "SanctumAuth": []
+               }
+            ],
             "tags": ["Anime TV"],
             "summary": "Get Animes TV format",
             "description": "Get Animes TV format by season and year, if season and year not included then it will get animes according current season and year.",
@@ -215,6 +225,11 @@
       },
       "/movies/{season}/{year}": {
          "get": {
+            "security": [
+               {
+                  "SanctumAuth": []
+               }
+            ],
             "tags": ["Anime Movie"],
             "summary": "Get Animes Movies format",
             "description": "Get Animes Movies format by season and year, if season and year not included then it will get animes according current season and year.",
@@ -268,6 +283,11 @@
       },
       "/ovas/{season}/{year}": {
          "get": {
+            "security": [
+               {
+                  "SanctumAuth": []
+               }
+            ],
             "tags": ["Anime OVA"],
             "summary": "Get Animes OVA format",
             "description": "Get Animes OVA format by season and year, if season and year not included then it will get animes according current season and year.",
@@ -321,6 +341,11 @@
       },
       "/anime/{id}": {
          "get": {
+            "security": [
+               {
+                  "SanctumAuth": []
+               }
+            ],
             "tags": ["Anime by id"],
             "summary": "Get Anime by id",
             "description": "Get Anime by id",
@@ -361,6 +386,11 @@
       },
       "/search": {
          "get": {
+            "security": [
+               {
+                  "SanctumAuth": []
+               }
+            ],
             "tags": ["Anime Search"],
             "summary": "Search Anime",
             "description": "Search Anime by title",
@@ -718,6 +748,12 @@
             "schema": {
                "type": "string"
             }
+         }
+      },
+      "securitySchemes": {
+         "SanctumAuth": {
+            "type": "http",
+            "scheme": "bearer"
          }
       }
    }
