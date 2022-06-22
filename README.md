@@ -11,7 +11,7 @@ Livechart Scraper is a simple **RESTful** application that provide anime informa
 This application was created to learn about web scraping (this is my first app focused on web scraping technique) and learn Laravel more deeply.
 
 ## API Documentation
-You can read API documentation [here](https://mproyyan.github.io/livechart-scraper/)
+You can read API documentation [here](https://mproyyan.github.io/livechart-scraper-docs/)
 
 ## Requirements
 - PHP 8.1
